@@ -99,6 +99,9 @@ import DriverDetailsPage from '@/pages/public-profile/profiles/driver/DriverDeta
 import { TripsPage } from '@/pages/trips/TripsPage';
 import MaintenanceDetailsPage from '@/pages/public-profile/profiles/maintenance/blocks/MaintenanceDetailsPage';
 import { AddMaintenance } from '@/pages/account/home/add-maintenance/AddMaintenance';
+import { AddReservation } from '@/pages/account/home/add-reservation/AddReservation';
+import { Reservaions } from '@/pages/public-profile/profiles/reservation/Reservaions';
+import ReservationsDetailsPage from '@/pages/public-profile/profiles/reservation/blocks/ReservationsDetailsPage';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -132,6 +135,10 @@ const AppRoutingSetup = (): ReactElement => {
             element={<MaintenanceDetailsPage />}
           />
           <Route path="/maintenance/add-maintenance" element={<AddMaintenance />} />
+
+          <Route path="/reservations/reservation" element={<Reservaions />} />
+          <Route path="/reservations/reservation/view-reservation" element={<ReservationsDetailsPage />} />
+          <Route path="/reservations/add-reservation" element={<AddReservation />} />
 
           <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
           <Route path="/public-profile/profiles/company" element={<ProfileCompanyPage />} />

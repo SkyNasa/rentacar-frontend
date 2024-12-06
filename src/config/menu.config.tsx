@@ -51,24 +51,24 @@ export const MENU_SIDEBAR: TMenuConfig = [
     }, ]
   },
 
-/*   {
+  {
     title: 'Reservations',
     externalIcon: 'reservations', 
     children: [
       {
         title: 'Add Reservations',
-        path: '/vehicle/login'
+        path: '/reservations/add-reservation'
       },
       {
         title: 'Reservations',
-        path: '/vehicle/signup'
+        path: '/reservations/reservation'
       },
 
 
     ]
     
-  }, */
-  /* {
+  }, 
+ {
     title: 'Customer',
     externalIcon: 'customer',
     children: [
@@ -84,7 +84,7 @@ export const MENU_SIDEBAR: TMenuConfig = [
      
     ]
 
-  }, */
+  }, 
   {
     title: 'Maintenance',
     externalIcon: 'maintenance',
