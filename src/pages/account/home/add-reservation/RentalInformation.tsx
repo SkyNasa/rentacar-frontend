@@ -247,7 +247,7 @@ const RentalInformation = () => {
             <div className="text-sm text-gray-600">US Dollar</div>
           </div>
         </div>
-      </div>{' '}
+      </div>
     </div>
   );
 };
