@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Settings } from 'lucide-react';
 import {
-  AddGeofenceIcon,
   DeleteIcon,
   EditIcon,
   MaintenanceIcon,

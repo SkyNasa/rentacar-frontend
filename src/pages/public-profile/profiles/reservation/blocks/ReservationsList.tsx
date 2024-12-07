@@ -1,283 +1,281 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { DataGrid } from '@/components';
-import { getVehicles, VehicleDetails } from '@/api/cars';
-import { Paginated } from '@/api/common';
-import { ColumnDef } from '@tanstack/react-table';
-import { toAbsoluteUrl } from '@/utils';
-import { StatusDropdown } from '../StatusDropdown';
-import { useNavigate } from 'react-router';
+import { toAbsoluteUrl } from '@/utils/Assets';
+import { SearchIcon, ViewIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-interface ReservationDetails {
-  id: string;
+interface Reservation {
+  number: string;
   pickupDate: string;
+  pickupTime: string;
   dropoffDate: string;
+  dropoffTime: string;
   car: {
+    plate: string;
     brand: string;
     model: string;
-    plate: string;
-    brandImage: string;
+    icon: string;
   };
   customer: {
     name: string;
-    email: string;
     avatar: string;
+    email: string;
   };
   price: number;
   status: 'New' | 'Confirmed' | 'In Progress' | 'Canceled' | 'Completed';
 }
 
-interface ReservationListProps {
-  searchQuery?: string;
-}
+const mockReservations: Reservation[] = [
+  {
+    number: '525144',
+    pickupDate: 'Sep 9, 2020',
+    pickupTime: '23:15',
+    dropoffDate: 'Sep 9, 2020',
+    dropoffTime: '23:15',
+    car: {
+      plate: 'GL96ABR',
+      brand: 'Toyota',
+      model: 'Reno Volvo',
+      icon: '/api/placeholder/40/40'
+    },
+    customer: {
+      name: 'Karina Clark',
+      avatar: '/api/placeholder/40/40',
+      email: 'karina@kpmg.com.au'
+    },
+    price: 250,
+    status: 'New'
+  },
+  {
+    number: '525145',
+    pickupDate: 'Sep 9, 2020',
+    pickupTime: '23:15',
+    dropoffDate: 'Sep 9, 2020',
+    dropoffTime: '23:15',
+    car: {
+      plate: 'GL96ABR',
+      brand: 'Toyota',
+      model: 'Reno Volvo',
+      icon: '/api/placeholder/40/40'
+    },
+    customer: {
+      name: 'Karina Clark',
+      avatar: '/api/placeholder/40/40',
+      email: 'karina@kpmg.com.au'
+    },
+    price: 250,
+    status: 'Confirmed'
+  },
+  {
+    number: '525146',
+    pickupDate: 'Sep 9, 2020',
+    pickupTime: '23:15',
+    dropoffDate: 'Sep 9, 2020',
+    dropoffTime: '23:15',
+    car: {
+      plate: 'GL96ABR',
+      brand: 'Toyota',
+      model: 'Reno Volvo',
+      icon: '/api/placeholder/40/40'
+    },
+    customer: {
+      name: 'Karina Clark',
+      avatar: '/api/placeholder/40/40',
+      email: 'karina@kpmg.com.au'
+    },
+    price: 250,
+    status: 'In Progress'
+  },
+  {
+    number: '525147',
+    pickupDate: 'Sep 9, 2020',
+    pickupTime: '23:15',
+    dropoffDate: 'Sep 9, 2020',
+    dropoffTime: '23:15',
+    car: {
+      plate: 'GL96ABR',
+      brand: 'Toyota',
+      model: 'Reno Volvo',
+      icon: '/api/placeholder/40/40'
+    },
+    customer: {
+      name: 'Karina Clark',
+      avatar: '/api/placeholder/40/40',
+      email: 'karina@kpmg.com.au'
+    },
+    price: 250,
+    status: 'Canceled'
+  },
+  {
+    number: '525147',
+    pickupDate: 'Sep 9, 2020',
+    pickupTime: '23:15',
+    dropoffDate: 'Sep 9, 2020',
+    dropoffTime: '23:15',
+    car: {
+      plate: 'GL96ABR',
+      brand: 'Toyota',
+      model: 'Reno Volvo',
+      icon: '/api/placeholder/40/40'
+    },
+    customer: {
+      name: 'Karina Clark',
+      avatar: '/api/placeholder/40/40',
+      email: 'karina@kpmg.com.au'
+    },
+    price: 250,
+    status: 'Completed'
+  }
+];
 
-type ViewMode = 'grid' | 'card';
+const ReservationsList: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState(1);
 
-const getStatusColor = (status: string) => {
-  const colors = {
-    New: { color: '#50CD89', backgroundColor: '#E8FFF3' },
-    Confirmed: { color: '#7239EA', backgroundColor: '#F8F5FF' },
-    'In Progress': { color: '#FFA800', backgroundColor: '#FFF8DD' },
-    Canceled: { color: '#F1416C', backgroundColor: '#FFF5F8' },
-    Completed: { color: '#009EF7', backgroundColor: '#F1FAFF' }
-  };
-  return colors[status as keyof typeof colors];
-};
-
-const ReservationsList: React.FC<ReservationListProps> = ({ searchQuery = '' }) => {
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [reservations, setReservations] = useState<Paginated<ReservationDetails>>();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Replace this with your API call or static data for now
-    const mockReservations = {
-      data: [
-        {
-          id: '1',
-          pickupDate: '2024-12-01T10:00:00',
-          dropoffDate: '2024-12-05T10:00:00',
-          car: {
-            brand: 'Toyota',
-            model: 'Corolla',
-            plate: '34 XYZ 456',
-            brandImage: '/media/car-brands/toyota.png', // Placeholder for a real image path
-          },
-          customer: {
-            name: 'John Doe',
-            email: 'johndoe@example.com',
-            avatar: '/media/customers/john.png', // Placeholder for a real image path
-          },
-          price: 120,
-          status: 'Confirmed',
-        },
-        {
-          id: '2',
-          pickupDate: '2024-12-02T15:30:00',
-          dropoffDate: '2024-12-06T12:00:00',
-          car: {
-            brand: 'BMW',
-            model: 'X5',
-            plate: '06 ABC 789',
-            brandImage: '/media/car-brands/bmw.png',
-          },
-          customer: {
-            name: 'Jane Smith',
-            email: 'janesmith@example.com',
-            avatar: '/media/customers/jane.png',
-          },
-          price: 200,
-          status: 'In Progress',
-        },
-        {
-          id: '3',
-          pickupDate: '2024-12-03T09:00:00',
-          dropoffDate: '2024-12-08T18:00:00',
-          car: {
-            brand: 'Audi',
-            model: 'A6',
-            plate: '34 DEF 123',
-            brandImage: '/media/car-brands/audi.png',
-          },
-          customer: {
-            name: 'Ali Khan',
-            email: 'alikhan@example.com',
-            avatar: '/media/customers/ali.png',
-          },
-          price: 180,
-          status: 'New',
-        },
-      ],
-      totalCount: 3,
+  const getStatusStyle = (status: string) => {
+    const styles = {
+      New: 'text-green-500 bg-green-50',
+      Confirmed: 'text-purple-500 bg-purple-50',
+      'In Progress': 'text-yellow-500 bg-yellow-50',
+      Canceled: 'text-red-500 bg-red-50',
+      Completed: 'text-blue-500 bg-blue-50'
     };
-  
-    setReservations(mockReservations as any);
-  }, []);
-  
+    return styles[status as keyof typeof styles];
+  };
 
-  const columns = useMemo<ColumnDef<ReservationDetails>[]>(
-    () => [
-      {
-        accessorKey: 'id',
-        header: 'Number',
-        cell: ({ row }) => (
-          <span className="font-medium text-gray-700">{row.original.id}</span>
-        )
-      },
-      {
-        accessorKey: 'pickupDate',
-        header: 'Pickup Date',
-        cell: ({ row }) => (
-          <div className="text-gray-700">
-            <div>{new Date(row.original.pickupDate).toLocaleDateString()}</div>
-            <div className="text-sm text-gray-500">
-              {new Date(row.original.pickupDate).toLocaleTimeString([], { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-              })}
-            </div>
-          </div>
-        )
-      },
-      {
-        accessorKey: 'dropoffDate',
-        header: 'Drop off Date',
-        cell: ({ row }) => (
-          <div className="text-gray-700">
-            <div>{new Date(row.original.dropoffDate).toLocaleDateString()}</div>
-            <div className="text-sm text-gray-500">
-              {new Date(row.original.dropoffDate).toLocaleTimeString([], { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-              })}
-            </div>
-          </div>
-        )
-      },
-      {
-        accessorKey: 'car',
-        header: 'Car',
-        cell: ({ row }) => (
-          <div className="flex items-center gap-3">
-            <img src={row.original.car.brandImage} className="w-8 h-8" alt="Brand" />
-            <div>
-              <div className="flex items-center gap-2">
-                <div className="bg-[#4086F4] text-white px-2 py-1 rounded text-xs">TR</div>
-                <span className="font-medium">{row.original.car.plate}</span>
-              </div>
-              <div className="text-sm text-gray-500">{row.original.car.brand}</div>
-            </div>
-          </div>
-        )
-      },
-      {
-        accessorKey: 'customer',
-        header: 'Customer',
-        cell: ({ row }) => (
-          <div className="flex items-center gap-3">
-            <img 
-              src={row.original.customer.avatar} 
-              className="w-10 h-10 rounded-full"
-              alt={row.original.customer.name}
-            />
-            <div>
-              <div className="font-medium">{row.original.customer.name}</div>
-              <div className="text-sm text-gray-500">{row.original.customer.email}</div>
-            </div>
-          </div>
-        )
-      },
-      {
-        accessorKey: 'price',
-        header: 'Price',
-        cell: ({ row }) => (
-          <span className="font-medium">{row.original.price} $</span>
-        )
-      },
-      {
-        accessorKey: 'status',
-        header: 'STATUS',
-        cell: ({ row }) => {
-          const style = getStatusColor(row.original.status);
-          return (
-            <div 
-              className="px-3 py-1 rounded-md text-sm inline-flex items-center gap-1"
-              style={style}
-            >
-              <span>{row.original.status}</span>
-              <i className="ki-duotone ki-arrow-down fs-5"></i>
-            </div>
-          );
-        }
-      },
-      {
-        id: 'actions',
-        header: 'Action',
-        cell: () => (
-          <div className="flex gap-2">
-            <button className="p-2 hover:bg-gray-100 rounded">
-              <img src={toAbsoluteUrl('/media/icons/view-light.svg')} alt="View" />
-            </button>
-            <button className="p-2 hover:bg-gray-100 rounded">
-              <img src={toAbsoluteUrl('/media/icons/edit-light.svg')} alt="Edit" />
-            </button>
-            <button className="p-2 hover:bg-gray-100 rounded">
-              <i className="ki-duotone ki-dots-square fs-2"></i>
-            </button>
-          </div>
-        )
-      }
-    ],
-    []
-  );
+  const navigate = useNavigate();
+  const handleViewReservationClick = () => {
+    navigate('view-Reservation');
+  };
 
   return (
-    <div className="card">
-      <div className="px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b">
-        <div>
-          <h3 className="text-xl font-medium">Reservations List</h3>
-          <div className="flex items-center gap-2 mt-1">
-            <button className="text-sm text-gray-500 hover:text-gray-700">Filters</button>
-            <span className="bg-gray-200 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-xs">2</span>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold">Reservations List</h1>
+        <div className="flex gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-gray-600">Filters</span>
+            <span className="bg-gray-100 px-2 py-1 rounded-full text-sm">2</span>
           </div>
-        </div>
-        <div className="flex items-center gap-4">
+          <button className="px-4 py-2 bg-gray-100 rounded">Export</button>
           <div className="relative">
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search"
               className="pl-10 pr-4 py-2 border rounded-lg w-64"
             />
-            <i className="ki-duotone ki-magnifier fs-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-          </div>
-          <div className="flex gap-1 border rounded-lg p-1">
-            <button
-              className={`p-2 rounded transition-colors ${
-                viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-50'
-              }`}
-              onClick={() => setViewMode('grid')}
-              title="Grid View"
-            >
-              <i className="ki-filled ki-row-horizontal text-xl" />
-            </button>
-            <button
-              className={`p-2 rounded transition-colors ${
-                viewMode === 'card' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-50'
-              }`}
-              onClick={() => setViewMode('card')}
-              title="Card View"
-            >
-              <i className="ki-filled ki-category text-xl" />
-            </button>
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <SearchIcon />
+            </span>
           </div>
         </div>
       </div>
-      <div className="p-6">
-        <DataGrid
-          columns={columns}
-          data={reservations?.data ?? []}
-          serverSide={false}
-          filters={searchQuery.trim().length > 2 ? [{ id: '__any', value: searchQuery }] : []}
-        />
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full">
+          <thead>
+            <tr className="text-gray-500 text-left">
+              <th className="py-3 px-4 font-medium">Number</th>
+              <th className="py-3 px-4 font-medium">Pickup Date</th>
+              <th className="py-3 px-4 font-medium">Drop off Date</th>
+              <th className="py-3 px-4 font-medium">Car</th>
+              <th className="py-3 px-4 font-medium">Customer</th>
+              <th className="py-3 px-4 font-medium">Price</th>
+              <th className="py-3 px-4 font-medium">STATUS</th>
+              <th className="py-3 px-4 font-medium">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mockReservations.map((reservation, index) => (
+              <tr key={index} className="border-b">
+                <td className="py-4 px-4">{reservation.number}</td>
+                <td className="py-4 px-4">
+                  <div>{reservation.pickupDate}</div>
+                  <div className="text-gray-400 text-sm">{reservation.pickupTime}</div>
+                </td>
+                <td className="py-4 px-4">
+                  <div>{reservation.dropoffDate}</div>
+                  <div className="text-gray-400 text-sm">{reservation.dropoffTime}</div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    <img src={reservation.car.icon} alt="" className="w-8 h-8" />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="bg-blue-500 text-white px-2 py-0.5 text-xs rounded">
+                          TR
+                        </span>
+                        <span>{reservation.car.plate}</span>
+                      </div>
+                      <div className="text-gray-400 text-sm">{reservation.car.model}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={reservation.customer.avatar}
+                      alt=""
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <div>
+                      <div>{reservation.customer.name}</div>
+                      <div className="text-gray-400 text-sm">{reservation.customer.email}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">{reservation.price} $</td>
+                <td className="py-4 px-4">
+                  <div
+                    className={`inline-flex items-center gap-1 px-3 py-1 rounded ${getStatusStyle(reservation.status)}`}
+                  >
+                    {reservation.status} <span className="text-xs">▼</span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex gap-2">
+                    <a href="#" onClick={handleViewReservationClick} className="p-2">
+                      <img src={toAbsoluteUrl('/media/icons/view-light.svg')} alt="View" />
+                    </a>
+                    <a href="#" className="p-2">
+                      <img src={toAbsoluteUrl('/media/icons/edit-light.svg')} alt="Edit" />
+                    </a>
+                    <a href="#" className="p-2">
+                      <img src={toAbsoluteUrl('/media/icons/delete-light.svg')} alt="Delete" />
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          className="px-3 py-2 rounded bg-gray-100 text-gray-600"
+          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+        >
+          ←
+        </button>
+        <div className="flex gap-2">
+          {[1, 2, 3, 4].map((page) => (
+            <button
+              key={page}
+              className={`px-3 py-1 rounded ${
+                currentPage === page ? 'bg-blue-500 text-white' : 'text-gray-600'
+              }`}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ))}
+          <span className="px-3 py-1">...</span>
+        </div>
+        <button
+          className="px-3 py-2 rounded bg-gray-100 text-gray-600"
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          →
+        </button>
       </div>
     </div>
   );

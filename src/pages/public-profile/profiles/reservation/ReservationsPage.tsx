@@ -8,6 +8,7 @@ const ReservationsPage = () => {
 
       <UserMiniCards />
       <ReservationsList />
+      
     </div>
   );
 };

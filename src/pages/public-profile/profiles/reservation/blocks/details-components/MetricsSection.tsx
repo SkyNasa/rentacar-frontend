@@ -87,7 +87,7 @@ const VehicleMetrics: React.FC<VehicleMetricsProps> = ({ metrics = {
   ];
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="w-2/3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {metricConfigs.map((config, index) => (
         <MetricCard key={index} {...config} />
       ))}
