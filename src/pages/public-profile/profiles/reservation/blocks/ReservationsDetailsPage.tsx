@@ -5,8 +5,7 @@ import VehicleMetrics from './details-components/VehicleMetrics';
 import TripAndMapSection from './details-components/TripAndMapSection';
 import { MaintenanceViolationTable } from '../../vehicle/blocks/maintenance';
 import TripList from '../../vehicle/blocks/details-components/TripList';
-import FileList from './details-components/FileList';
-import { BillingInvoicing } from '@/pages/account/billing/enterprise';
+import FileList from './details-components/FileList';;
 import { BillingTable } from '../../driver/details-components/BillingTable';
 
 const files = [
@@ -51,6 +50,7 @@ const App: React.FC = () => {
         <ProfileSection />
         <VehicleMetrics />
         <TripAndMapSection />
+
 
         <div className="flex flex-col mb-4 md:flex-row space-y-4 md:space-x-4 h-full w-600 m-2 mb-6 ">
           <TripList trips={trips} totalTrips={450} className="sm:w-full mt-4" title="Trips" />

@@ -133,7 +133,7 @@ const BillingTable = ({ searchQuery }: BillingTableProps) => {
   );
 
   return (
-    <div className="flex flex-col items-start w-full p-4">
+    <div className="card card-grid h-full flex flex-col items-start w-full p-4">
       <h1 className="text-xl font-semibold mb-4 ps-4">Billing History</h1>
       <div className="w-full overflow-x-auto">
         <DataGrid columns={columns} data={data} />

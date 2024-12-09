@@ -1,5 +1,8 @@
 import React from 'react';
-import { CountryCityIcon, MailIcon, MapIcon, MapPin, PhoneIcon } from './svg';
+import { CountryCityIcon, MailIcon, MapIcon, PhoneIcon } from './svg';
+import { CarView } from '../CarView';
+import { Vehicle } from '@/api/cars';
+import { CarPlate } from '@/pages/dashboards/dashboard/blocks/CarPlate';
 
 interface ProfileData {
   name: string;
@@ -26,30 +29,40 @@ const ProfileSection: React.FC = () => {
     phone2: '+90954948849',
     country: 'Turkey',
     city: 'Istanbul',
-    address: 'adrees',
+    address: 'Address',
     rentalDate: '16-09-2024',
     pickupDate: '16-09-2024',
     dropoffDate: '16-09-2024',
     days: '30 Day',
-    vehicleID: 'GL96ABR'
+    vehicleID: 'GL96ABR',
+  };
+
+  // Create a Vehicle object
+  const vehicle: Vehicle = {
+    brandImage: '/api/placeholder/brand.png', // Update with the actual brand image URL
+    plate: profileData.vehicleID,
+    imei: '123456789',
+    name: ''
   };
 
   return (
-    <div className="p-6">
+    <div className="card card-grid h-full min-w-full p-6">
       <div className="flex flex-col space-y-6">
         {/* Top section with profile and details */}
-        <div className="flex items-start space-x-4">
+        <div className="flex justify-between items-center space-x-4">
           {/* Profile image and main info */}
-          <img src="/api/placeholder/120/120" alt="Profile" className="w-24 h-24 rounded-lg" />
+          <img src="/api/placeholder/120/120" alt="Profile" className="w-24 h-full rounded-lg" />
           <div className="flex-1">
-            <div className="flex items-center space-x-2">
-              <h2 className="text-lg font-semibold">{profileData.name}</h2>
-              <span className="text-gray-500 text-sm">{profileData.nationality}</span>
+            <div className="flex justify-between items-center space-x-2">
+              {/* Name and nationality */}
+              <div>
+                <h2 className="text-lg font-semibold">{profileData.name}</h2>
+                <span className="text-gray-500 text-sm block">{profileData.nationality}</span>
+              </div>
 
               {/* Vehicle and status badges */}
               <div className="ml-auto flex items-center space-x-2">
-                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm">TR</span>
-                <span className="text-gray-700">{profileData.vehicleID}</span>
+                <CarPlate vehicle={vehicle} />
                 <span className="ml-2">
                   <img src="/api/placeholder/24/24" alt="Toyota" className="w-6 h-6" />
                 </span>
@@ -96,31 +109,32 @@ const ProfileSection: React.FC = () => {
                 {profileData.address}
               </div>
             </div>
+
+            <div className="grid grid-cols-4 gap-8 p-4">
+              <div>
+                <div className="text-lg font-medium">{profileData.rentalDate}</div>
+                <div className="text-sm text-gray-500">23:15</div>
+                <div className="text-xs text-gray-400">Rental Date</div>
+              </div>
+              <div>
+                <div className="text-lg font-medium">{profileData.pickupDate}</div>
+                <div className="text-sm text-gray-500">23:15</div>
+                <div className="text-xs text-green-500">Pickup Date</div>
+              </div>
+              <div>
+                <div className="text-lg font-medium">{profileData.dropoffDate}</div>
+                <div className="text-sm text-gray-500">23:15</div>
+                <div className="text-xs text-red-500">Drop off Date</div>
+              </div>
+              <div>
+                <div className="text-lg font-medium">{profileData.days}</div>
+                <div className="text-xs text-gray-400">Number Of Rental Days</div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Date information */}
-        <div className="grid grid-cols-4 gap-8">
-          <div>
-            <div className="text-lg font-medium">{profileData.rentalDate}</div>
-            <div className="text-sm text-gray-500">23:15</div>
-            <div className="text-xs text-gray-400">Rental Date</div>
-          </div>
-          <div>
-            <div className="text-lg font-medium">{profileData.pickupDate}</div>
-            <div className="text-sm text-gray-500">23:15</div>
-            <div className="text-xs text-green-500">Pickup Date</div>
-          </div>
-          <div>
-            <div className="text-lg font-medium">{profileData.dropoffDate}</div>
-            <div className="text-sm text-gray-500">23:15</div>
-            <div className="text-xs text-red-500">Drop off Date</div>
-          </div>
-          <div>
-            <div className="text-lg font-medium">{profileData.days}</div>
-            <div className="text-xs text-gray-400">Number Of Rental Days</div>
-          </div>
-        </div>
       </div>
     </div>
   );
