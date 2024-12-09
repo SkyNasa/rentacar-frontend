@@ -1,4 +1,5 @@
-import { ReservationsList } from './blocks';
+
+import ReservationsList from './blocks/ReservationsList';
 import { UserMiniCards } from './mini-cards/UserMiniCards';
 
 const ReservationsPage = () => {
