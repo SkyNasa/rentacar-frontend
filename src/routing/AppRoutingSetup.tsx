@@ -102,6 +102,7 @@ import { AddMaintenance } from '@/pages/account/home/add-maintenance/AddMaintena
 import { AddReservation } from '@/pages/account/home/add-reservation/AddReservation';
 import { Reservaions } from '@/pages/public-profile/profiles/reservation/Reservaions';
 import ReservationsDetailsPage from '@/pages/public-profile/profiles/reservation/blocks/ReservationsDetailsPage';
+import { Customers } from '@/pages/public-profile/profiles/customer/Customers';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -137,8 +138,13 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/maintenance/add-maintenance" element={<AddMaintenance />} />
 
           <Route path="/reservations/reservation" element={<Reservaions />} />
-          <Route path="/reservations/reservation/view-reservation" element={<ReservationsDetailsPage />} />
+          <Route
+            path="/reservations/reservation/view-reservation"
+            element={<ReservationsDetailsPage />}
+          />
           <Route path="/reservations/add-reservation" element={<AddReservation />} />
+
+          <Route path="/customer/customer" element={<Customers />} />
 
           <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
           <Route path="/public-profile/profiles/company" element={<ProfileCompanyPage />} />
