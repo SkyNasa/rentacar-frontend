@@ -1,3 +1,4 @@
 export * from './RentalInformation';
-export * from './AddReservation';
+export * from './AddCustomer';
 export * from './blocks';
+export * from './AddCustomerReservation';

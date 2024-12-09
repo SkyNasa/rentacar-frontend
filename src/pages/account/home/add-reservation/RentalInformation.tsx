@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CalendarIcon, UserIcon } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 const RentalInformation = () => {
   const [selectedRentType, setSelectedRentType] = useState('Daily');
@@ -7,7 +8,10 @@ const RentalInformation = () => {
   const [customizeRate, setCustomizeRate] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [selectedChildSeats, setSelectedChildSeats] = useState<number[]>([]);
-
+  const navigate = useNavigate();
+  const handleAddCustomer = () => {
+    navigate('add-customer');
+  };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 pt-4">
       <div className="w-2/3 bg-white rounded-lg shadow-lg">
@@ -56,7 +60,10 @@ const RentalInformation = () => {
                 </select>
                 <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
-              <button className="px-4 py-2 bg-emerald-500 text-white rounded-lg">
+              <button
+                onClick={handleAddCustomer}
+                className="px-4 py-2 bg-emerald-500 text-white rounded-lg"
+              >
                 Add Customer
               </button>
             </div>

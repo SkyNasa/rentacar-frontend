@@ -103,6 +103,7 @@ import { AddReservation } from '@/pages/account/home/add-reservation/AddReservat
 import { Reservaions } from '@/pages/public-profile/profiles/reservation/Reservaions';
 import ReservationsDetailsPage from '@/pages/public-profile/profiles/reservation/blocks/ReservationsDetailsPage';
 import { Customers } from '@/pages/public-profile/profiles/customer/Customers';
+import { AddCustomer } from '@/pages/account/home/add-reservation';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -143,8 +144,11 @@ const AppRoutingSetup = (): ReactElement => {
             element={<ReservationsDetailsPage />}
           />
           <Route path="/reservations/add-reservation" element={<AddReservation />} />
+          <Route path="/reservations/add-reservation/add-customer" element={<AddCustomer />} />
 
           <Route path="/customer/customer" element={<Customers />} />
+
+
 
           <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
           <Route path="/public-profile/profiles/company" element={<ProfileCompanyPage />} />
