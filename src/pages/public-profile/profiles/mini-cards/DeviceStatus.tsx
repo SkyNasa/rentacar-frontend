@@ -15,8 +15,8 @@ interface StatItem {
   icon: string;
 }
 
-const Card: React.FC<CardProps> = ({ children, className = '' }) => (
-  <div className={`rounded-lg ${className}`}>{children}</div>
+const Card: React.FC<CardProps> = ({ children }) => (
+  <div className="card">{children}</div>
 );
 
 const DeviceStatus: React.FC = () => {
