@@ -5,7 +5,7 @@ interface IGeneralSettingsProps {
   title: string;
 }
 
-const Password = ({ title }: IGeneralSettingsProps) => {
+const CarScratch = ({ title }: IGeneralSettingsProps) => {
   const [scratches, setScratches] = useState<number[]>([1]); // Initial scratch item
 
   // Function to add a new scratch
@@ -15,7 +15,7 @@ const Password = ({ title }: IGeneralSettingsProps) => {
 
   return (
     <div className="card pb-4">
-      <div className="card-header" id="Password">
+      <div className="card-header" id="CarScratch">
         <h3 className="card-title">{title}</h3>
       </div>
       <div className="card-body grid gap-5">
@@ -85,4 +85,4 @@ const Password = ({ title }: IGeneralSettingsProps) => {
   );
 };
 
-export { Password, type IGeneralSettingsProps };
+export { CarScratch };

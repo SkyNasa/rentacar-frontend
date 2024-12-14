@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Information, Password } from './blocks';
+import { Information, CarScratch } from './blocks';
 
 const AddCustomerReservation = () => {
   const [activeTab, setActiveTab] = useState<'information' | 'account' >('information');
@@ -56,7 +56,7 @@ const AddCustomerReservation = () => {
         <Information title="Information" />
       </div>
       <div ref={accountRef}>
-        <Password title={''} />
+        <CarScratch title={''} />
       </div>
     
     </div>
