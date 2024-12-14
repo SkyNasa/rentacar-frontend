@@ -56,7 +56,7 @@ const AddCustomerReservation = () => {
         <Information title="Information" />
       </div>
       <div ref={accountRef}>
-        <CarScratch title={''} />
+        <CarScratch title={'Car Scratch'} />
       </div>
     
     </div>
