@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Information, Password, Contact } from './blocks';
+import { Information, Password } from './blocks';
 
 const AddCustomerReservation = () => {
-  const [activeTab, setActiveTab] = useState<'information' | 'account' | 'contact'>('information');
+  const [activeTab, setActiveTab] = useState<'information' | 'account' >('information');
 
   const informationRef = useRef<HTMLDivElement>(null);
   const accountRef = useRef<HTMLDivElement>(null);
@@ -10,7 +10,7 @@ const AddCustomerReservation = () => {
 
   const handleTabClick = (
     ref: React.RefObject<HTMLDivElement>,
-    tab: 'information' | 'account' | 'contact'
+    tab: 'information' | 'account' 
   ) => {
     setActiveTab(tab);
 
@@ -49,16 +49,7 @@ const AddCustomerReservation = () => {
         >
           Account
         </button>
-        <button
-          className={`tab px-4 py-2 font-medium text-lg border-b-4 ${
-            activeTab === 'contact'
-              ? 'text-primary border-primary'
-              : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
-          }`}
-          onClick={() => handleTabClick(contactRef, 'contact')}
-        >
-          Contact
-        </button>
+        
       </div>
 
       <div ref={informationRef}>
@@ -67,9 +58,7 @@ const AddCustomerReservation = () => {
       <div ref={accountRef}>
         <Password title={''} />
       </div>
-      <div ref={contactRef}>
-        <Contact />
-      </div>
+    
     </div>
   );
 };
