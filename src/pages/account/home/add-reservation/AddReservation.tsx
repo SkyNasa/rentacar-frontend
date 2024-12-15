@@ -13,6 +13,7 @@ import { PageNavbar } from '@/pages/account';
 
 import { useLayout } from '@/providers';
 import RentalInformation from './RentalInformation';
+import React from 'react';
 
 const AddReservation = () => {
   const { currentLayout } = useLayout();

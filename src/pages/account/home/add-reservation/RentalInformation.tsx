@@ -13,10 +13,10 @@ const RentalInformation = () => {
     navigate('add-customer');
   };
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 pt-4">
-      <div className="w-2/3 bg-white rounded-lg shadow-lg">
+    <div className="flex items-center justify-center min-h-screen card pt-4">
+      <div className="card w-2/3 rounded-lg shadow-lg">
         {/* Tab Header */}
-        <div className="border-b">
+        <div className="">
           <div className="px-6">
             <button className="py-4 border-b-2 border-blue-600 text-blue-600 font-medium">
               Rental Information
@@ -25,7 +25,7 @@ const RentalInformation = () => {
         </div>
 
         {/* Form Content */}
-        <div className="p-6 bg-white">
+        <div className="p-6 card">
           {/* Type of Rent */}
           <div className="mb-6">
             <label className="block text-sm font-medium mb-2">Type Of Rent</label>

@@ -1,15 +1,14 @@
 import { toAbsoluteUrl } from '@/utils';
-import arMessages from './messages/ar.json';
-import enMessages from './messages/en.json';
-import frMessages from './messages/fr.json';
-import zhMessages from './messages/zh.json';
 import { type TLanguage } from './types.d';
 
+// Temporary empty messages object to avoid import errors
+const emptyMessages = {};
+
 const I18N_MESSAGES = {
-  en: enMessages,
-  ar: arMessages,
-  fr: frMessages,
-  zh: zhMessages
+  en: emptyMessages,
+  ar: emptyMessages,
+  fr: emptyMessages,
+  zh: emptyMessages
 };
 
 const I18N_CONFIG_KEY = 'i18nConfig';
