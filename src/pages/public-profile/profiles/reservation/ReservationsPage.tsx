@@ -1,4 +1,5 @@
 
+import React from 'react';
 import ReservationsList from './blocks/ReservationsList';
 import { UserMiniCards } from './mini-cards/UserMiniCards';
 

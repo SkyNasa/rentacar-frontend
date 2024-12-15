@@ -6,6 +6,7 @@ import { Container } from '@/components/container';
 
 
 import { ReservationsPage } from '.';
+import React from 'react';
 
 const Reservaions = () => {
   const image = (
