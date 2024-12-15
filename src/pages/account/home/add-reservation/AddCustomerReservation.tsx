@@ -2,15 +2,15 @@ import React, { useRef, useState } from 'react';
 import { Information, CarScratch } from './blocks';
 
 const AddCustomerReservation = () => {
-  const [activeTab, setActiveTab] = useState<'information' | 'account' >('information');
+  const [activeTab, setActiveTab] = useState<'information' | 'scratch' >('information');
 
   const informationRef = useRef<HTMLDivElement>(null);
-  const accountRef = useRef<HTMLDivElement>(null);
+  const scratchRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
 
   const handleTabClick = (
     ref: React.RefObject<HTMLDivElement>,
-    tab: 'information' | 'account' 
+    tab: 'information' | 'scratch' 
   ) => {
     setActiveTab(tab);
 
@@ -41,13 +41,13 @@ const AddCustomerReservation = () => {
         </button>
         <button
           className={`tab px-4 py-2 font-medium text-lg border-b-4 ${
-            activeTab === 'account'
+            activeTab === 'scratch'
               ? 'text-primary border-primary'
               : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
           }`}
-          onClick={() => handleTabClick(accountRef, 'account')}
+          onClick={() => handleTabClick(scratchRef, 'scratch')}
         >
-          Account
+          Scratch
         </button>
         
       </div>
@@ -55,7 +55,7 @@ const AddCustomerReservation = () => {
       <div ref={informationRef}>
         <Information title="Information" />
       </div>
-      <div ref={accountRef}>
+      <div ref={scratchRef}>
         <CarScratch title={'Car Scratch'} />
       </div>
     
