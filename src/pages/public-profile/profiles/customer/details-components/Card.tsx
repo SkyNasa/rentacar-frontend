@@ -1,7 +1,7 @@
 import React from 'react';
 
 type CardProps = {
-  type: 'maintenance' | 'violations';
+  type: 'maintenance' | 'violations' | 'reservations';
   title: string;
   description: string;
   count: number;
@@ -10,7 +10,15 @@ type CardProps = {
   paidAmount: number;
 };
 
-const Card: React.FC<CardProps> = ({ type, title, description, count, date, unpaidAmount, paidAmount }) => {
+const Card: React.FC<CardProps> = ({
+  type,
+  title,
+  description,
+  count,
+  date,
+  unpaidAmount,
+  paidAmount
+}) => {
   const MaintenanceIcon = () => (
     <svg width="76" height="75" viewBox="0 0 76 75" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_d_709_11735)">
@@ -109,26 +117,108 @@ const Card: React.FC<CardProps> = ({ type, title, description, count, date, unpa
       </defs>
     </svg>
   );
+  const ReservationsIcon = () => (
+    <svg width="76" height="75" viewBox="0 0 76 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g filter="url(#filter0_d_699_14376)">
+        <rect x="6" y="2" width="64" height="64" rx="12" fill="#50CD89" />
+      </g>
+      <g clip-path="url(#clip0_699_14376)">
+        <g clip-path="url(#clip1_699_14376)">
+          <path
+            d="M24.5837 23.1616C24.4747 23.1255 24.3661 23.1255 24.2574 23.1255C23.7498 23.1255 23.3152 23.4518 23.17 23.9591C23.0975 24.249 23.1339 24.5392 23.2787 24.7926C23.4238 25.0464 23.6776 25.2276 23.9675 25.3363C24.5837 25.5175 25.1996 25.1551 25.3809 24.5753C25.4534 24.2854 25.4173 23.9955 25.2722 23.7417C25.1274 23.4518 24.8736 23.2706 24.5837 23.1616Z"
+            fill="white"
+          />
+          <path
+            d="M30.709 28.4534C31.7238 28.4534 32.7025 28.1996 33.5725 27.6921C33.935 27.4747 34.37 27.5834 34.5873 27.9459C34.8046 28.3083 34.696 28.7433 34.3335 28.9607C33.2462 29.6133 31.9776 29.9393 30.709 29.9393C30.4917 29.9393 30.274 29.9393 30.0566 29.9032"
+            fill="white"
+          />
+          <path
+            d="M27.2658 27.2937C28.2083 28.0186 29.3679 28.4172 30.5643 28.4536C31.3979 24.8291 29.1867 21.132 25.5261 20.1172C25.1636 20.0086 24.8011 19.9721 24.4748 19.8995L25.6712 20.4071C25.4535 20.8421 25.3087 21.3132 25.1997 21.8208C25.8159 22.0381 26.3235 22.4367 26.6495 23.0168C26.9759 23.6331 27.0845 24.3215 26.9033 24.9739C26.5773 26.1338 25.5261 26.8587 24.3661 26.8587C24.1488 26.8587 23.895 26.8226 23.6412 26.75C22.9528 26.5688 22.4091 26.1338 22.0466 25.5176C21.7203 24.9017 21.6116 24.2129 21.7929 23.5605C22.0466 22.6179 22.8077 21.9656 23.6777 21.7483C23.7863 21.0959 23.9676 20.4797 24.2575 19.8634C22.8077 19.7183 21.3939 20.0086 20.0893 20.7335C18.4221 21.6757 17.2257 23.1616 16.6821 25.0103C15.8485 27.8013 16.7546 30.7009 18.9293 32.4406C19.038 32.5493 19.0745 32.6944 19.038 32.8031L17.5882 38.3485C17.5882 38.4572 17.5882 38.5298 17.6247 38.6023L18.4582 40.4871C18.5308 40.6684 18.4582 40.8496 18.3131 40.9583L16.9358 41.8644C16.7911 41.9731 16.7185 42.1543 16.7911 42.3355L17.4795 43.7853C17.5521 43.9665 17.516 44.1478 17.3348 44.2564L15.9936 45.1265C15.8485 45.2351 15.7759 45.4164 15.8485 45.5976L16.5373 47.0474C16.6099 47.2286 16.5373 47.446 16.3922 47.5185L15.1961 48.1709C15.0149 48.2799 14.9424 48.4972 15.051 48.6784L16.3922 51.1069C16.4286 51.1795 16.5373 51.2517 16.6099 51.2882H16.7185C16.7911 51.2882 16.8633 51.2882 16.8997 51.2517L19.6907 49.6207C19.7629 49.5846 19.8355 49.512 19.8719 49.4033L24.1849 34.5789C24.2214 34.4341 24.33 34.3254 24.4748 34.3254C26.7946 33.9991 28.9333 32.2594 29.9842 29.9396C28.643 29.8309 27.3383 29.3233 26.251 28.4897C25.9246 28.236 25.8524 27.7648 26.1058 27.4388C26.4683 27.1125 26.9398 27.0399 27.2658 27.2937Z"
+            fill="white"
+          />
+          <path
+            d="M24.2217 19.8271C25.3812 17.4347 27.8823 15.7676 30.7094 15.7676C34.044 15.7676 36.9797 18.1235 37.7046 21.313C37.7772 21.7116 37.5234 22.1105 37.1249 22.1831C36.7263 22.2553 36.3274 22.0018 36.2187 21.6029C35.6389 19.0658 33.3191 17.2174 30.6733 17.2174C28.4621 17.2174 26.5051 18.486 25.5625 20.3708"
+            fill="white"
+          />
+          <path
+            d="M59.7774 35.1226L47.0555 22.5457C46.7652 22.2555 45.9681 21.6031 45.0255 21.567L36.7978 20.8057C36.7617 20.8057 36.7617 20.8057 36.7256 20.8057H36.5443C35.6743 20.8057 34.9494 21.132 34.2971 21.7844C33.6083 22.4732 33.3184 23.1981 33.3184 24.2129V24.2854L34.0433 32.4406C34.0433 33.3828 34.7321 34.1442 35.022 34.4341L47.7439 47.0113C47.889 47.1561 48.0703 47.2286 48.2876 47.2286C48.5053 47.2286 48.6865 47.1561 48.8313 47.0113L59.8135 36.1738C60.0673 35.8839 60.0673 35.4128 59.7774 35.1226ZM42.6335 34.2529C42.4522 34.2529 42.2346 34.1803 42.0898 34.0352C41.7999 33.7453 41.7999 33.2742 42.0898 32.9843L45.7143 29.3959C46.0042 29.106 46.4753 29.106 46.7652 29.3959C47.0555 29.6858 47.0555 30.1572 46.7652 30.4471L43.1407 34.0352C42.9959 34.1803 42.8147 34.2529 42.6335 34.2529ZM51.006 34.6153L47.3815 38.2034C47.2367 38.3485 47.0555 38.4211 46.8378 38.4211C46.6204 38.4211 46.4392 38.3485 46.2941 38.2034C46.0042 37.9135 46.0042 37.4424 46.2941 37.1525L49.9186 33.5641C50.2085 33.2742 50.68 33.2742 50.9699 33.5641C51.2959 33.854 51.2959 34.3254 51.006 34.6153Z"
+            fill="white"
+          />
+        </g>
+      </g>
+      <defs>
+        <filter
+          id="filter0_d_699_14376"
+          x="0.5"
+          y="-2.38419e-07"
+          width="75"
+          height="75"
+          filterUnits="userSpaceOnUse"
+          color-interpolation-filters="sRGB"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy="3.5" />
+          <feGaussianBlur stdDeviation="2.75" />
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_699_14376" />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_699_14376"
+            result="shape"
+          />
+        </filter>
+        <clipPath id="clip0_699_14376">
+          <rect width="47" height="47" fill="white" transform="translate(14 10)" />
+        </clipPath>
+        <clipPath id="clip1_699_14376">
+          <rect width="45" height="45" fill="white" transform="translate(15 11)" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm w-full md:w-1/3 mt-8">
+    <div className="card rounded-xl p-4 shadow-sm w-full md:w-1/3 mt-8">
       <div className="flex flex-wrap gap-4 mb-4">
         <div className="flex items-start space-x-2 flex-grow">
-          <div>{type === 'maintenance' ? <MaintenanceIcon /> : <ViolationsIcon />}</div>
+          <div>
+            {type === 'maintenance' ? (
+              <MaintenanceIcon />
+            ) : type === 'violations' ? (
+              <ViolationsIcon />
+            ) : (
+              <ReservationsIcon />
+            )}
+          </div>
           <div className="flex-grow min-w-0">
             <h2 className="text-gray-800 font-semibold text-base truncate">
-              {type === 'maintenance' ? 'Maintenance' : 'Violations'}
+              {type === 'maintenance'
+                ? 'Maintenance'
+                : type === 'violations'
+                  ? 'Violations'
+                  : 'Reservations'}
             </h2>
-            <p className="text-gray-400 text-sm">{date}</p>
+            <p className="text-gray-400 text-sm">for today</p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2 sm:flex-col sm:items-center ml-auto">
           <div className="bg-gray-100 px-3 py-1 rounded-full">
             <span className="text-gray-600">{count}</span>
           </div>
           <span className="text-gray-500 text-sm sm:mt-1">
-            {type === 'maintenance' ? 'Maintenance' : 'Violations'}
+            {type === 'maintenance'
+              ? 'Maintenance'
+              : type === 'violations'
+                ? 'Violations'
+                : 'cars'}
           </span>
         </div>
       </div>

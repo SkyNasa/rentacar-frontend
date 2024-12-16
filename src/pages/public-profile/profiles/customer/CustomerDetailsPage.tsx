@@ -50,12 +50,12 @@ const files = [
   }
 ];
 
-const VehicleInfoCards = () => {
+const CustomerDetailsPage = () => {
   return (
     <>
       <Toolbar />
       <div className="w-full mx-auto px-4 ">
-        <div className="w-full bg-white m-5 p-5 rounded-lg shadow-sm">
+        <div className="m-5 p-5 rounded-lg shadow-sm">
           <ProfileCard
             profileImage="/path/to/image.jpg"
             name="Brad Dennis"
@@ -71,6 +71,17 @@ const VehicleInfoCards = () => {
           />
 
           <div className="flex justify-between items-start space-x-4">
+            {/* Maintenance Card */}
+            <Card
+              type="reservation"
+              date="2024-12-01"
+              count={5}
+              unpaidAmount={2000}
+              paidAmount={1500}
+              title={''}
+              description={''}
+            />
+
             {/* Maintenance Card */}
             <Card
               type="maintenance"
@@ -95,8 +106,7 @@ const VehicleInfoCards = () => {
           </div>
         </div>
         <div className="flex flex-col mb-4 md:flex-row space-y-4 md:space-x-4 h-full w-600 m-5 mb-6 ">
-          <TripList trips={trips} totalTrips={450} className="sm:w-full mt-4" title="Trips" />
-          <div className="p-4 card w-full">map</div>
+          
         </div>
         <div className="m-5">
           <MaintenanceViolationTable />
@@ -113,4 +123,4 @@ const VehicleInfoCards = () => {
   );
 };
 
-export default VehicleInfoCards;
+export default CustomerDetailsPage;

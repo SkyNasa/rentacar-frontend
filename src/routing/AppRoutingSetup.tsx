@@ -104,6 +104,8 @@ import { Reservaions } from '@/pages/public-profile/profiles/reservation/Reserva
 import ReservationsDetailsPage from '@/pages/public-profile/profiles/reservation/blocks/ReservationsDetailsPage';
 import { Customers } from '@/pages/public-profile/profiles/customer/Customers';
 import { AddCustomer } from '@/pages/account/home/add-reservation';
+import React from 'react';
+import CustomerDetailsPage from '../pages/public-profile/profiles/customer/CustomerDetailsPage';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -147,6 +149,7 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/reservations/add-reservation/add-customer" element={<AddCustomer />} />
 
           <Route path="/customer/customer" element={<Customers />} />
+          <Route path="/customer/customer/view-customer" element={<CustomerDetailsPage />} />
 
 
 
