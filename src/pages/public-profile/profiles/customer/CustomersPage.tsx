@@ -1,5 +1,5 @@
-
-import CustomersList from './blocks/CustomersList';
+import React from 'react';
+import { CustomersList } from './blocks/CustomersList';
 import { UserMiniCards } from './mini-cards/UserMiniCards';
 
 const CustomersPage = () => {
@@ -9,7 +9,6 @@ const CustomersPage = () => {
 
       <UserMiniCards />
       <CustomersList />
-      
     </div>
   );
 };
