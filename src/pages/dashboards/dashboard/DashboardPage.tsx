@@ -4,6 +4,7 @@ import { Container } from '@/components/container';
 import { Toolbar, ToolbarHeading } from '@/layouts/demo1/toolbar';
 
 import { DashboardContent } from '.';
+import React from 'react';
 
 const DashboardPage = () => {
   return (

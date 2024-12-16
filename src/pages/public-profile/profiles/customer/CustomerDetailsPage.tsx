@@ -1,4 +1,5 @@
 import { MaintenanceViolationTable } from './blocks/maintenance/MaintenanceViolation';
+import { toAbsoluteUrl } from '@/utils';
 
 import Toolbar from './Toolbar';
 import FileList from './details-components/FileList';
@@ -7,6 +8,9 @@ import ProfileCard from './ProfileCard';
 import Card from './details-components/Card';
 import { BillingTable } from './details-components/BillingTable';
 import React from 'react';
+import { VehicleList } from '../../../dashboards/dashboard/blocks/Vehicles';
+import { DriverList } from './blocks/customersGrid';
+import ReservationsList from '../reservation/blocks/ReservationsList';
 
 interface TripData {
   distance: string;
@@ -105,8 +109,18 @@ const CustomerDetailsPage = () => {
             />
           </div>
         </div>
-        <div className="flex flex-col mb-4 md:flex-row space-y-4 md:space-x-4 h-full w-600 m-5 mb-6 ">
-          
+        <div className="">
+          <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
+            <div className="lg:col-span-3">
+              <ReservationsList />
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
+            <div className="lg:col-span-3">
+              <VehicleList />
+            </div>
+          </div>
         </div>
         <div className="m-5">
           <MaintenanceViolationTable />

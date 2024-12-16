@@ -1,367 +1,454 @@
-import React, { useState } from 'react';
-import { SearchIcon, LayoutGridIcon, LayoutListIcon } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import React from 'react';
+import { toAbsoluteUrl } from '@/utils';
 
-interface Reservation {
-  number: string;
-  pickupDate: string;
-  pickupTime: string;
-  dropoffDate: string;
-  dropoffTime: string;
-  car: {
-    plate: string;
-    brand: string;
-    model: string;
-    icon: string;
-  };
-  customer: {
-    name: string;
-    avatar: string;
-    email: string;
-  };
-  price: number;
-  status: 'New' | 'Confirmed' | 'In Progress' | 'Canceled' | 'Completed';
-}
-const mockReservations: Reservation[] = [
-  {
-    number: '525144',
-    pickupDate: 'Sep 9, 2020',
-    pickupTime: '23:15',
-    dropoffDate: 'Sep 9, 2020',
-    dropoffTime: '23:15',
-    car: {
-      plate: 'GL96ABR',
-      brand: 'Toyota',
-      model: 'Reno Volvo',
-      icon: '/api/placeholder/40/40'
-    },
-    customer: {
-      name: 'Karina Clark',
-      avatar: '/api/placeholder/40/40',
-      email: 'karina@kpmg.com.au'
-    },
-    price: 250,
-    status: 'New'
-  },
-  {
-    number: '525145',
-    pickupDate: 'Sep 9, 2020',
-    pickupTime: '23:15',
-    dropoffDate: 'Sep 9, 2020',
-    dropoffTime: '23:15',
-    car: {
-      plate: 'GL96ABR',
-      brand: 'Toyota',
-      model: 'Reno Volvo',
-      icon: '/api/placeholder/40/40'
-    },
-    customer: {
-      name: 'Karina Clark',
-      avatar: '/api/placeholder/40/40',
-      email: 'karina@kpmg.com.au'
-    },
-    price: 250,
-    status: 'Confirmed'
-  },
-  {
-    number: '525146',
-    pickupDate: 'Sep 9, 2020',
-    pickupTime: '23:15',
-    dropoffDate: 'Sep 9, 2020',
-    dropoffTime: '23:15',
-    car: {
-      plate: 'GL96ABR',
-      brand: 'Toyota',
-      model: 'Reno Volvo',
-      icon: '/api/placeholder/40/40'
-    },
-    customer: {
-      name: 'Karina Clark',
-      avatar: '/api/placeholder/40/40',
-      email: 'karina@kpmg.com.au'
-    },
-    price: 250,
-    status: 'In Progress'
-  },
-  {
-    number: '525147',
-    pickupDate: 'Sep 9, 2020',
-    pickupTime: '23:15',
-    dropoffDate: 'Sep 9, 2020',
-    dropoffTime: '23:15',
-    car: {
-      plate: 'GL96ABR',
-      brand: 'Toyota',
-      model: 'Reno Volvo',
-      icon: '/api/placeholder/40/40'
-    },
-    customer: {
-      name: 'Karina Clark',
-      avatar: '/api/placeholder/40/40',
-      email: 'karina@kpmg.com.au'
-    },
-    price: 250,
-    status: 'Canceled'
-  },
-  {
-    number: '525148',
-    pickupDate: 'Sep 9, 2020',
-    pickupTime: '23:15',
-    dropoffDate: 'Sep 9, 2020',
-    dropoffTime: '23:15',
-    car: {
-      plate: 'GL96ABR',
-      brand: 'Toyota',
-      model: 'Reno Volvo',
-      icon: '/api/placeholder/40/40'
-    },
-    customer: {
-      name: 'Karina Clark',
-      avatar: '/api/placeholder/40/40',
-      email: 'karina@kpmg.com.au'
-    },
-    price: 250,
-    status: 'Completed'
-  }
-];
-const ReservationsList: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
-  const navigate = useNavigate();
-
-  const getStatusStyle = (status: string) => {
-    const styles = {
-      New: 'text-green-500 bg-green-50',
-      Confirmed: 'text-purple-500 bg-purple-50',
-      'In Progress': 'text-yellow-500 bg-yellow-50',
-      Canceled: 'text-red-500 bg-red-50',
-      Completed: 'text-blue-500 bg-blue-50'
-    };
-    return styles[status as keyof typeof styles];
-  };
-
-  const handleViewReservationClick = () => {
-    navigate('view-Reservation');
-  };
-
-  const ReservationGridCard: React.FC<{ reservation: Reservation }> = ({ reservation }) => (
-    <div className="bg-white rounded-lg shadow p-4 flex flex-col">
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center gap-3">
-          <img
-            src={reservation.customer.avatar}
-            alt=""
-            className="w-12 h-12 rounded-full"
-          />
-          <div>
-            <div className="font-semibold">{reservation.customer.name}</div>
-            <div className="text-gray-500 text-sm">{reservation.customer.email}</div>
-          </div>
-        </div>
-        <div className={`px-3 py-1 rounded ${getStatusStyle(reservation.status)}`}>
-          {reservation.status}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3 mb-4">
-        <img src={reservation.car.icon} alt="" className="w-10 h-10" />
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-blue-500 text-white px-2 py-0.5 text-xs rounded">
-              TR
-            </span>
-            <span>{reservation.car.plate}</span>
-          </div>
-          <div className="text-gray-500 text-sm">{reservation.car.model}</div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <div className="text-gray-500 text-sm">Pickup</div>
-          <div>{reservation.pickupDate}</div>
-          <div className="text-gray-500 text-sm">{reservation.pickupTime}</div>
-        </div>
-        <div>
-          <div className="text-gray-500 text-sm">Drop off</div>
-          <div>{reservation.dropoffDate}</div>
-          <div className="text-gray-500 text-sm">{reservation.dropoffTime}</div>
-        </div>
-      </div>
-
-      <div className="flex justify-between items-center mt-auto">
-        <div className="font-semibold">{reservation.price} $</div>
-        <div className="flex gap-2">
-          <button
-            onClick={handleViewReservationClick}
-            className="p-2 hover:bg-gray-100 rounded"
-          >
-            View
-          </button>
-          <button className="p-2 hover:bg-gray-100 rounded">Edit</button>
-          <button className="p-2 hover:bg-gray-100 rounded">Delete</button>
-        </div>
-      </div>
-    </div>
-  );
+const ReservationList = () => {
+  const [reservations] = useState(staticReservations);
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Reservations List</h1>
-        <div className="flex gap-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setViewMode('list')}
-              className={`p-2 rounded ${
-                viewMode === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-100'
-              }`}
-            >
-              <LayoutListIcon className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded ${
-                viewMode === 'grid' ? 'bg-blue-500 text-white' : 'bg-gray-100'
-              }`}
-            >
-              <LayoutGridIcon className="w-5 h-5" />
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-gray-600">Filters</span>
-            <span className="bg-gray-100 px-2 py-1 rounded-full text-sm">2</span>
-          </div>
-          <button className="px-4 py-2 bg-gray-100 rounded">Export</button>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search"
-              className="pl-10 pr-4 py-2 border rounded-lg w-64"
-            />
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          </div>
+    <div className="card">
+      {/* Header */}
+      <div className="px-7 pt-6 flex items-center justify-between">
+        <div className="card-title">
+          <h3>Reservations</h3>
+          <h4 className="text-sm font-thin text-[#B5B5C3]">
+            You have {reservations.length}{' '}
+            {reservations.length > 1 ? 'reservations' : 'reservation'}
+          </h4>
         </div>
+        <button className="btn btn-info px-8">
+         
+          Add Reservation
+        </button>
       </div>
 
-      {viewMode === 'list' ? (
-        // List View
-        <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead>
-              <tr className="text-gray-500 text-left">
-                <th className="py-3 px-4 font-medium">Number</th>
-                <th className="py-3 px-4 font-medium">Pickup Date</th>
-                <th className="py-3 px-4 font-medium">Drop off Date</th>
-                <th className="py-3 px-4 font-medium">Car</th>
-                <th className="py-3 px-4 font-medium">Customer</th>
-                <th className="py-3 px-4 font-medium">Price</th>
-                <th className="py-3 px-4 font-medium">STATUS</th>
-                <th className="py-3 px-4 font-medium">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockReservations.map((reservation, index) => (
-                <tr key={index} className="border-b">
-                  <td className="py-4 px-4">{reservation.number}</td>
-                  <td className="py-4 px-4">
-                    <div>{reservation.pickupDate}</div>
-                    <div className="text-gray-400 text-sm">{reservation.pickupTime}</div>
-                  </td>
-                  <td className="py-4 px-4">
-                    <div>{reservation.dropoffDate}</div>
-                    <div className="text-gray-400 text-sm">{reservation.dropoffTime}</div>
-                  </td>
-                  <td className="py-4 px-4">
-                    <div className="flex items-center gap-3">
-                      <img src={reservation.car.icon} alt="" className="w-8 h-8" />
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="bg-blue-500 text-white px-2 py-0.5 text-xs rounded">
-                            TR
-                          </span>
-                          <span>{reservation.car.plate}</span>
-                        </div>
-                        <div className="text-gray-400 text-sm">{reservation.car.model}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-4 px-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={reservation.customer.avatar}
-                        alt=""
-                        className="w-10 h-10 rounded-full"
-                      />
-                      <div>
-                        <div>{reservation.customer.name}</div>
-                        <div className="text-gray-400 text-sm">{reservation.customer.email}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-4 px-4">{reservation.price} $</td>
-                  <td className="py-4 px-4">
-                    <div
-                      className={`inline-flex items-center gap-1 px-3 py-1 rounded ${getStatusStyle(
-                        reservation.status
-                      )}`}
-                    >
-                      {reservation.status} <span className="text-xs">▼</span>
-                    </div>
-                  </td>
-                  <td className="py-4 px-4">
-                    <div className="flex gap-2">
-                      <button onClick={handleViewReservationClick} className="p-2">
-                        View
-                      </button>
-                      <button className="p-2">Edit</button>
-                      <button className="p-2">Delete</button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        // Grid View
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockReservations.map((reservation, index) => (
-            <ReservationGridCard key={index} reservation={reservation} />
-          ))}
-        </div>
-      )}
-
-      <div className="flex justify-between items-center mt-6">
-        <button
-          className="px-3 py-2 rounded bg-gray-100 text-gray-600"
-          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-        >
-          ←
-        </button>
-        <div className="flex gap-2">
-          {[1, 2, 3, 4].map((page) => (
-            <button
-              key={page}
-              className={`px-3 py-1 rounded ${
-                currentPage === page ? 'bg-blue-500 text-white' : 'text-gray-600'
-              }`}
-              onClick={() => setCurrentPage(page)}
+      {/* Reservation Cards */}
+      <div className="card-body scrollable-x pt-2 px-6 pb-7">
+        <div className="flex flex-col lg:flex-row gap-4">
+          {reservations.map((reservation) => (
+            <div
+              key={reservation.id}
+              className="w-full max-w-xl bg-white rounded-xl p-4 shadow-sm border border-gray-100"
             >
-              {page}
-            </button>
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-lg font-semibold">{reservation.car.model}</h3>
+                  <img src="/toyota-logo.svg" alt="Toyota" className="h-6 w-6" />
+                  <span className="px-2 py-1 bg-green-50 text-green-500 text-sm rounded-md">
+                    New
+                  </span>
+                  <span className="px-3 py-1 bg-blue-500 text-white text-sm rounded-md">TR</span>
+                  <span className="text-gray-600">{reservation.car.plate}</span>
+                </div>
+              </div>
+
+              {/* Details Grid */}
+              <div className="grid grid-cols-4 gap-6">
+                {/* Price */}
+                <div className="flex flex-col gap-1">
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 32 32"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g filter="url(#filter0_d_2228_4900)">
+                      <rect x="6" y="2" width="20.3569" height="20.3569" rx="5" fill="#FFA800" />
+                      <g clip-path="url(#clip0_2228_4900)">
+                        <path
+                          d="M18.5861 9.34632L19.703 8.27338C19.7159 8.29958 19.7309 8.32468 19.7398 8.35288L20.5498 10.9099C20.6604 11.2593 20.5621 11.6371 20.2933 11.8955L15.9908 16.0289C15.7904 16.2214 15.5273 16.3176 15.2639 16.3176C15.0007 16.3176 14.7376 16.2214 14.5372 16.0289L11.3396 12.9568C10.9389 12.5719 10.9389 11.9453 11.3396 11.5604L15.6419 7.42721C15.9107 7.16899 16.3037 7.07467 16.6679 7.18056L19.3293 7.95871C19.3587 7.96732 19.385 7.98168 19.4123 7.99414L18.2954 9.06709C18.1731 8.99771 18.0324 8.95517 17.8803 8.95517C17.4269 8.95517 17.0581 9.30943 17.0581 9.74509C17.0581 10.1808 17.4269 10.535 17.8803 10.535C18.3338 10.535 18.7026 10.1808 18.7026 9.74509C18.7026 9.59902 18.6583 9.4638 18.5861 9.34632ZM17.8804 9.35013C17.6537 9.35013 17.4692 9.52737 17.4692 9.74509C17.4692 9.96281 17.6537 10.1401 17.8804 10.1401C18.107 10.1401 18.2915 9.96281 18.2915 9.74509C18.2915 9.52737 18.107 9.35013 17.8804 9.35013ZM20.5842 12.1748L16.2815 16.3082C16.0101 16.5689 15.6487 16.7126 15.2639 16.7126C14.8793 16.7126 14.5179 16.569 14.2465 16.3082L11.6404 13.8044C11.4237 14.2286 11.5476 14.754 11.9597 15.0394L15.6285 17.5797C15.8099 17.7052 16.0199 17.7656 16.2281 17.7656C16.5475 17.7656 16.8626 17.6233 17.0634 17.356L20.6207 12.6138C20.778 12.4041 20.8391 12.1488 20.8032 11.9011C20.7426 11.9992 20.6704 12.0918 20.5842 12.1748ZM21.3739 6.38891C21.2936 6.31177 21.1635 6.31177 21.0832 6.38891L19.4123 7.99414C19.5405 8.05265 19.6421 8.15023 19.703 8.27338L21.3739 6.66816C21.4542 6.59103 21.4542 6.46606 21.3739 6.38891Z"
+                          fill="white"
+                        />
+                      </g>
+                    </g>
+                    <defs>
+                      <filter
+                        id="filter0_d_2228_4900"
+                        x="0.5"
+                        y="-2.38419e-07"
+                        width="31.3574"
+                        height="31.3569"
+                        filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB"
+                      >
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix
+                          in="SourceAlpha"
+                          type="matrix"
+                          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                          result="hardAlpha"
+                        />
+                        <feOffset dy="3.5" />
+                        <feGaussianBlur stdDeviation="2.75" />
+                        <feColorMatrix
+                          type="matrix"
+                          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"
+                        />
+                        <feBlend
+                          mode="normal"
+                          in2="BackgroundImageFix"
+                          result="effect1_dropShadow_2228_4900"
+                        />
+                        <feBlend
+                          mode="normal"
+                          in="SourceGraphic"
+                          in2="effect1_dropShadow_2228_4900"
+                          result="shape"
+                        />
+                      </filter>
+                      <clipPath id="clip0_2228_4900">
+                        <rect
+                          x="10"
+                          y="6.07129"
+                          width="12.2142"
+                          height="12.2142"
+                          rx="5"
+                          fill="white"
+                        />
+                      </clipPath>
+                    </defs>
+                  </svg>
+
+                  <span className="font-semibold">{reservation.price} $</span>
+                </div>
+
+                {/* Pickup Date */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="0 0 32 32"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g filter="url(#filter0_d_2228_4910)">
+                        <rect x="6" y="2" width="20.3569" height="20.3569" rx="5" fill="#5151F9" />
+                        <g clip-path="url(#clip0_2228_4910)">
+                          <path
+                            d="M13.5516 10.0779H13.691C13.9029 10.0779 14.0747 9.9061 14.0747 9.69427V8.63558V8.23958C14.0747 8.02775 13.9029 7.85596 13.691 7.85596H13.5516C13.3397 7.85596 13.168 8.02775 13.168 8.23958V8.6356V9.69427C13.168 9.9061 13.3397 10.0779 13.5516 10.0779Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M18.4725 10.0686H18.612C18.8238 10.0686 18.9956 9.89684 18.9956 9.685V8.53533V8.23028C18.9956 8.01848 18.8238 7.84668 18.612 7.84668H18.4725C18.2606 7.84668 18.0889 8.01848 18.0889 8.23028V8.53533V9.68498C18.0889 9.89684 18.2607 10.0686 18.4725 10.0686Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M20.2916 8.63574H19.307V9.78539C19.307 10.1689 18.995 10.3804 18.6116 10.3804H18.4721C18.0886 10.3804 17.7766 10.0684 17.7766 9.68491V8.63574H14.3863V9.69441C14.3863 10.0779 14.0743 10.3899 13.6908 10.3899H13.5514C13.1679 10.3899 12.8559 10.0779 12.8559 9.69441V8.63574H11.7936C11.4497 8.63574 11.1699 8.91553 11.1699 9.25945V16.7959C11.1699 17.1398 11.4497 17.4196 11.7936 17.4196H20.2916C20.6355 17.4196 20.9153 17.1398 20.9153 16.7959V9.25945C20.9153 8.91555 20.6355 8.63574 20.2916 8.63574ZM20.2916 16.7959H11.7936L11.7936 11.1046H20.2917L20.292 16.7958C20.292 16.7958 20.2919 16.7959 20.2916 16.7959Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M16.3646 13.0138H17.4844C17.5288 13.0138 17.5648 12.9778 17.5648 12.9334V11.9637C17.5648 11.9193 17.5288 11.8833 17.4844 11.8833H16.3646C16.3202 11.8833 16.2842 11.9193 16.2842 11.9637V12.9334C16.2842 12.9778 16.3202 13.0138 16.3646 13.0138Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M18.1917 13.0138H19.3116C19.356 13.0138 19.392 12.9778 19.392 12.9334V11.9637C19.392 11.9193 19.356 11.8833 19.3116 11.8833H18.1917C18.1473 11.8833 18.1113 11.9193 18.1113 11.9637V12.9334C18.1113 12.9778 18.1473 13.0138 18.1917 13.0138Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M12.7093 14.6012H13.8291C13.8735 14.6012 13.9095 14.5652 13.9095 14.5208V13.5511C13.9095 13.5067 13.8735 13.4707 13.8291 13.4707H12.7093C12.6649 13.4707 12.6289 13.5067 12.6289 13.5511V14.5208C12.6289 14.5652 12.6649 14.6012 12.7093 14.6012Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M14.5374 14.6012H15.6573C15.7016 14.6012 15.7376 14.5652 15.7376 14.5208V13.5511C15.7376 13.5067 15.7016 13.4707 15.6573 13.4707H14.5374C14.493 13.4707 14.457 13.5067 14.457 13.5511V14.5208C14.457 14.5652 14.493 14.6012 14.5374 14.6012Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M16.3646 14.6012H17.4844C17.5288 14.6012 17.5648 14.5652 17.5648 14.5208V13.5511C17.5648 13.5067 17.5288 13.4707 17.4844 13.4707H16.3646C16.3202 13.4707 16.2842 13.5067 16.2842 13.5511V14.5208C16.2842 14.5652 16.3202 14.6012 16.3646 14.6012Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M18.1917 14.6012H19.3116C19.356 14.6012 19.392 14.5652 19.392 14.5208V13.5511C19.392 13.5067 19.356 13.4707 19.3116 13.4707H18.1917C18.1473 13.4707 18.1113 13.5067 18.1113 13.5511V14.5208C18.1113 14.5652 18.1473 14.6012 18.1917 14.6012Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M13.8291 15.0581H12.7093C12.6649 15.0581 12.6289 15.0941 12.6289 15.1385V16.1082C12.6289 16.1526 12.6649 16.1886 12.7093 16.1886H13.8291C13.8735 16.1886 13.9095 16.1526 13.9095 16.1082V15.1385C13.9095 15.0941 13.8735 15.0581 13.8291 15.0581Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M15.6573 15.0581H14.5374C14.493 15.0581 14.457 15.0941 14.457 15.1385V16.1082C14.457 16.1526 14.493 16.1886 14.5374 16.1886H15.6573C15.7016 16.1886 15.7376 16.1526 15.7376 16.1082V15.1385C15.7376 15.0941 15.7016 15.0581 15.6573 15.0581Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M17.4844 15.0581H16.3646C16.3202 15.0581 16.2842 15.0941 16.2842 15.1385V16.1082C16.2842 16.1526 16.3202 16.1886 16.3646 16.1886H17.4844C17.5288 16.1886 17.5648 16.1526 17.5648 16.1082V15.1385C17.5648 15.0941 17.5288 15.0581 17.4844 15.0581Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M19.3116 15.0581H18.1917C18.1473 15.0581 18.1113 15.0941 18.1113 15.1385V16.1082C18.1113 16.1526 18.1473 16.1886 18.1917 16.1886H19.3116C19.356 16.1886 19.392 16.1526 19.392 16.1082V15.1385C19.392 15.0941 19.356 15.0581 19.3116 15.0581Z"
+                            fill="white"
+                          />
+                        </g>
+                      </g>
+                      <defs>
+                        <filter
+                          id="filter0_d_2228_4910"
+                          x="0.5"
+                          y="-2.38419e-07"
+                          width="31.3574"
+                          height="31.3569"
+                          filterUnits="userSpaceOnUse"
+                          color-interpolation-filters="sRGB"
+                        >
+                          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                          <feColorMatrix
+                            in="SourceAlpha"
+                            type="matrix"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                            result="hardAlpha"
+                          />
+                          <feOffset dy="3.5" />
+                          <feGaussianBlur stdDeviation="2.75" />
+                          <feColorMatrix
+                            type="matrix"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"
+                          />
+                          <feBlend
+                            mode="normal"
+                            in2="BackgroundImageFix"
+                            result="effect1_dropShadow_2228_4910"
+                          />
+                          <feBlend
+                            mode="normal"
+                            in="SourceGraphic"
+                            in2="effect1_dropShadow_2228_4910"
+                            result="shape"
+                          />
+                        </filter>
+                        <clipPath id="clip0_2228_4910">
+                          <rect
+                            width="9.74534"
+                            height="9.74534"
+                            fill="white"
+                            transform="translate(11.1699 7.76025)"
+                          />
+                        </clipPath>
+                      </defs>
+                    </svg>
+
+                    <span className="text-gray-500 text-sm">Pickup Date</span>
+                  </div>
+                  <div className="font-semibold">{reservation.pickupDate}</div>
+                  <div className="text-sm text-gray-500">23:15</div>
+                </div>
+
+                {/* Drop off Date */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="0 0 32 32"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g filter="url(#filter0_d_2228_4910)">
+                        <rect x="6" y="2" width="20.3569" height="20.3569" rx="5" fill="#5151F9" />
+                        <g clip-path="url(#clip0_2228_4910)">
+                          <path
+                            d="M13.5516 10.0779H13.691C13.9029 10.0779 14.0747 9.9061 14.0747 9.69427V8.63558V8.23958C14.0747 8.02775 13.9029 7.85596 13.691 7.85596H13.5516C13.3397 7.85596 13.168 8.02775 13.168 8.23958V8.6356V9.69427C13.168 9.9061 13.3397 10.0779 13.5516 10.0779Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M18.4725 10.0686H18.612C18.8238 10.0686 18.9956 9.89684 18.9956 9.685V8.53533V8.23028C18.9956 8.01848 18.8238 7.84668 18.612 7.84668H18.4725C18.2606 7.84668 18.0889 8.01848 18.0889 8.23028V8.53533V9.68498C18.0889 9.89684 18.2607 10.0686 18.4725 10.0686Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M20.2916 8.63574H19.307V9.78539C19.307 10.1689 18.995 10.3804 18.6116 10.3804H18.4721C18.0886 10.3804 17.7766 10.0684 17.7766 9.68491V8.63574H14.3863V9.69441C14.3863 10.0779 14.0743 10.3899 13.6908 10.3899H13.5514C13.1679 10.3899 12.8559 10.0779 12.8559 9.69441V8.63574H11.7936C11.4497 8.63574 11.1699 8.91553 11.1699 9.25945V16.7959C11.1699 17.1398 11.4497 17.4196 11.7936 17.4196H20.2916C20.6355 17.4196 20.9153 17.1398 20.9153 16.7959V9.25945C20.9153 8.91555 20.6355 8.63574 20.2916 8.63574ZM20.2916 16.7959H11.7936L11.7936 11.1046H20.2917L20.292 16.7958C20.292 16.7958 20.2919 16.7959 20.2916 16.7959Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M16.3646 13.0138H17.4844C17.5288 13.0138 17.5648 12.9778 17.5648 12.9334V11.9637C17.5648 11.9193 17.5288 11.8833 17.4844 11.8833H16.3646C16.3202 11.8833 16.2842 11.9193 16.2842 11.9637V12.9334C16.2842 12.9778 16.3202 13.0138 16.3646 13.0138Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M18.1917 13.0138H19.3116C19.356 13.0138 19.392 12.9778 19.392 12.9334V11.9637C19.392 11.9193 19.356 11.8833 19.3116 11.8833H18.1917C18.1473 11.8833 18.1113 11.9193 18.1113 11.9637V12.9334C18.1113 12.9778 18.1473 13.0138 18.1917 13.0138Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M12.7093 14.6012H13.8291C13.8735 14.6012 13.9095 14.5652 13.9095 14.5208V13.5511C13.9095 13.5067 13.8735 13.4707 13.8291 13.4707H12.7093C12.6649 13.4707 12.6289 13.5067 12.6289 13.5511V14.5208C12.6289 14.5652 12.6649 14.6012 12.7093 14.6012Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M14.5374 14.6012H15.6573C15.7016 14.6012 15.7376 14.5652 15.7376 14.5208V13.5511C15.7376 13.5067 15.7016 13.4707 15.6573 13.4707H14.5374C14.493 13.4707 14.457 13.5067 14.457 13.5511V14.5208C14.457 14.5652 14.493 14.6012 14.5374 14.6012Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M16.3646 14.6012H17.4844C17.5288 14.6012 17.5648 14.5652 17.5648 14.5208V13.5511C17.5648 13.5067 17.5288 13.4707 17.4844 13.4707H16.3646C16.3202 13.4707 16.2842 13.5067 16.2842 13.5511V14.5208C16.2842 14.5652 16.3202 14.6012 16.3646 14.6012Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M18.1917 14.6012H19.3116C19.356 14.6012 19.392 14.5652 19.392 14.5208V13.5511C19.392 13.5067 19.356 13.4707 19.3116 13.4707H18.1917C18.1473 13.4707 18.1113 13.5067 18.1113 13.5511V14.5208C18.1113 14.5652 18.1473 14.6012 18.1917 14.6012Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M13.8291 15.0581H12.7093C12.6649 15.0581 12.6289 15.0941 12.6289 15.1385V16.1082C12.6289 16.1526 12.6649 16.1886 12.7093 16.1886H13.8291C13.8735 16.1886 13.9095 16.1526 13.9095 16.1082V15.1385C13.9095 15.0941 13.8735 15.0581 13.8291 15.0581Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M15.6573 15.0581H14.5374C14.493 15.0581 14.457 15.0941 14.457 15.1385V16.1082C14.457 16.1526 14.493 16.1886 14.5374 16.1886H15.6573C15.7016 16.1886 15.7376 16.1526 15.7376 16.1082V15.1385C15.7376 15.0941 15.7016 15.0581 15.6573 15.0581Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M17.4844 15.0581H16.3646C16.3202 15.0581 16.2842 15.0941 16.2842 15.1385V16.1082C16.2842 16.1526 16.3202 16.1886 16.3646 16.1886H17.4844C17.5288 16.1886 17.5648 16.1526 17.5648 16.1082V15.1385C17.5648 15.0941 17.5288 15.0581 17.4844 15.0581Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M19.3116 15.0581H18.1917C18.1473 15.0581 18.1113 15.0941 18.1113 15.1385V16.1082C18.1113 16.1526 18.1473 16.1886 18.1917 16.1886H19.3116C19.356 16.1886 19.392 16.1526 19.392 16.1082V15.1385C19.392 15.0941 19.356 15.0581 19.3116 15.0581Z"
+                            fill="white"
+                          />
+                        </g>
+                      </g>
+                      <defs>
+                        <filter
+                          id="filter0_d_2228_4910"
+                          x="0.5"
+                          y="-2.38419e-07"
+                          width="31.3574"
+                          height="31.3569"
+                          filterUnits="userSpaceOnUse"
+                          color-interpolation-filters="sRGB"
+                        >
+                          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                          <feColorMatrix
+                            in="SourceAlpha"
+                            type="matrix"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                            result="hardAlpha"
+                          />
+                          <feOffset dy="3.5" />
+                          <feGaussianBlur stdDeviation="2.75" />
+                          <feColorMatrix
+                            type="matrix"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"
+                          />
+                          <feBlend
+                            mode="normal"
+                            in2="BackgroundImageFix"
+                            result="effect1_dropShadow_2228_4910"
+                          />
+                          <feBlend
+                            mode="normal"
+                            in="SourceGraphic"
+                            in2="effect1_dropShadow_2228_4910"
+                            result="shape"
+                          />
+                        </filter>
+                        <clipPath id="clip0_2228_4910">
+                          <rect
+                            width="9.74534"
+                            height="9.74534"
+                            fill="white"
+                            transform="translate(11.1699 7.76025)"
+                          />
+                        </clipPath>
+                      </defs>
+                    </svg>
+
+                    <span className="text-gray-500 text-sm">Drop off Date</span>
+                  </div>
+                  <div className="font-semibold">{reservation.dropOffDate}</div>
+                  <div className="text-sm text-gray-500">23:15</div>
+                </div>
+
+                {/* Receive */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-500 text-sm">Receive</span>
+                    <span className="text-gray-500 text-sm">10 Day / 30 Day</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-blue-500 h-2 rounded-full" style={{ width: '33%' }} />
+                  </div>
+                  <div className="text-sm text-gray-500">Booking ends in 16 Days</div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="text-xs border-t flex justify-center">
+                <a href="#" className="px-5 py-2 flex gap-2 border-r">
+                  <img src={toAbsoluteUrl('/media/icons/view-light.svg')} />
+                  <span>View</span>
+                </a>
+
+                <a href="#" className="px-5 py-2 border- flex gap-2">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2228_4994)">
+<path d="M3.69426 4.55403C3.65792 4.54199 3.62169 4.54199 3.58547 4.54199C3.41628 4.54199 3.27139 4.65078 3.22302 4.81985C3.19883 4.91648 3.21099 5.01323 3.25924 5.09771C3.30762 5.1823 3.39221 5.24271 3.48884 5.27893C3.69426 5.33934 3.89955 5.21852 3.95996 5.02526C3.98415 4.92863 3.97211 4.832 3.92374 4.74741C3.87548 4.65078 3.79089 4.59037 3.69426 4.55403Z" fill="#FFA800"/>
+<path d="M5.736 6.3183C6.07427 6.3183 6.4005 6.2337 6.69051 6.06451C6.81133 5.99207 6.95633 6.02829 7.02878 6.14911C7.10122 6.26992 7.065 6.41493 6.94418 6.48737C6.58173 6.70494 6.15886 6.8136 5.736 6.8136C5.66356 6.8136 5.591 6.8136 5.51855 6.80157" fill="#FFA800"/>
+<path d="M4.58859 5.93124C4.90278 6.17287 5.2893 6.30573 5.6881 6.31788C5.96595 5.1097 5.22889 3.87734 4.00868 3.53907C3.88787 3.50285 3.76705 3.4907 3.65827 3.46651L4.05706 3.6357C3.9845 3.78071 3.93624 3.93775 3.8999 4.10694C4.10531 4.17938 4.27451 4.31224 4.38317 4.50561C4.49195 4.71103 4.52818 4.94051 4.46777 5.15796C4.3591 5.5446 4.00868 5.78623 3.62204 5.78623C3.5496 5.78623 3.465 5.7742 3.38041 5.75001C3.15093 5.6896 2.9697 5.5446 2.84888 5.33918C2.7401 5.13389 2.70388 4.90429 2.76429 4.68684C2.84888 4.37264 3.10255 4.1552 3.39256 4.08275C3.42878 3.8653 3.48919 3.65989 3.58582 3.45448C3.10255 3.4061 2.63132 3.50285 2.19642 3.74449C1.64071 4.05857 1.24191 4.55387 1.06069 5.17011C0.78283 6.10043 1.08487 7.06697 1.80978 7.64687C1.846 7.68309 1.85815 7.73147 1.846 7.76769L1.36273 9.61618C1.36273 9.6524 1.36273 9.67658 1.37488 9.70077L1.65274 10.329C1.67693 10.3895 1.65274 10.4499 1.60437 10.4861L1.14528 10.7881C1.09703 10.8244 1.07284 10.8848 1.09703 10.9452L1.32651 11.4284C1.3507 11.4888 1.33866 11.5493 1.27825 11.5855L0.831204 11.8755C0.78283 11.9117 0.758643 11.9721 0.78283 12.0325L1.01243 12.5158C1.03662 12.5762 1.01243 12.6487 0.964057 12.6728L0.565382 12.8903C0.504973 12.9266 0.480786 12.9991 0.517008 13.0595L0.964057 13.869C0.976209 13.8932 1.01243 13.9172 1.03662 13.9294H1.07284C1.09703 13.9294 1.1211 13.9294 1.13325 13.9172L2.06357 13.3736C2.08764 13.3615 2.11182 13.3373 2.12398 13.3011L3.56164 8.35963C3.57379 8.31137 3.61001 8.27515 3.65827 8.27515C4.43155 8.16636 5.14442 7.58646 5.49472 6.81318C5.04767 6.77696 4.61277 6.60777 4.25032 6.32991C4.14154 6.24532 4.11747 6.08828 4.20195 5.97961C4.32276 5.87083 4.47992 5.84664 4.58859 5.93124Z" fill="#FFA800"/>
+<path d="M3.57422 3.44205C3.96074 2.64458 4.79443 2.08887 5.73678 2.08887C6.84833 2.08887 7.8269 2.87418 8.06854 3.93735C8.09273 4.07021 8.00813 4.20318 7.87528 4.22736C7.74243 4.25143 7.60946 4.16695 7.57324 4.03398C7.37997 3.18826 6.60669 2.57214 5.72475 2.57214C4.98769 2.57214 4.33535 2.995 4.02115 3.62327" fill="#FFA800"/>
+<path d="M15.4261 8.54085L11.1855 4.34857C11.0887 4.25183 10.823 4.03438 10.5088 4.02234L7.76625 3.76855C7.75421 3.76855 7.75421 3.76855 7.74218 3.76855H7.68177C7.39176 3.76855 7.15012 3.87734 6.93268 4.09479C6.70308 4.32439 6.60645 4.56602 6.60645 4.90429V4.92847L6.84808 7.64687C6.84808 7.96095 7.07768 8.21474 7.17431 8.31137L11.415 12.5038C11.4633 12.552 11.5237 12.5762 11.5962 12.5762C11.6688 12.5762 11.7292 12.552 11.7774 12.5038L15.4382 8.89127C15.5228 8.79464 15.5228 8.6376 15.4261 8.54085ZM9.71148 8.25096C9.65107 8.25096 9.57851 8.22677 9.53026 8.1784C9.43362 8.08177 9.43362 7.92473 9.53026 7.8281L10.7384 6.63196C10.8351 6.53533 10.9921 6.53533 11.0887 6.63196C11.1855 6.72859 11.1855 6.88574 11.0887 6.98237L9.88056 8.1784C9.8323 8.22677 9.77189 8.25096 9.71148 8.25096ZM12.5023 8.37178L11.2941 9.5678C11.2459 9.61618 11.1855 9.64036 11.1129 9.64036C11.0405 9.64036 10.9801 9.61618 10.9317 9.5678C10.8351 9.47117 10.8351 9.31413 10.9317 9.2175L12.1399 8.02136C12.2365 7.92473 12.3937 7.92473 12.4903 8.02136C12.599 8.11799 12.599 8.27515 12.5023 8.37178Z" fill="#FFA800"/>
+</g>
+<defs>
+<clipPath id="clip0_2228_4994">
+<rect width="15" height="15" fill="white" transform="translate(0.5 0.5)"/>
+</clipPath>
+</defs>
+</svg>
+
+
+                  <span>Extend</span>
+                </a>
+              </div>
+            </div>
           ))}
-          <span className="px-3 py-1">...</span>
         </div>
-        <button
-          className="px-3 py-2 rounded bg-gray-100 text-gray-600"
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          →
-        </button>
       </div>
     </div>
   );
 };
 
-export default ReservationsList;
+const staticReservations = [
+  {
+    id: '1',
+    car: {
+      model: 'Toyota Corolla',
+      plate: '34 ABC 123'
+    },
+    customer: {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      avatar: '/media/avatars/300-1.jpg'
+    },
+    pickupDate: '2024-06-01',
+    dropOffDate: '2024-06-05',
+    price: 150,
+    status: 'Upcoming'
+  },
+  {
+    id: '2',
+    car: {
+      model: 'Honda Civic',
+      plate: '35 XYZ 456'
+    },
+    customer: {
+      name: 'Jane Smith',
+      email: 'jane.smith@example.com',
+      avatar: '/media/avatars/300-2.jpg'
+    },
+    pickupDate: '2024-05-20',
+    dropOffDate: '2024-05-25',
+    price: 200,
+    status: 'Completed'
+  },
+  {
+    id: '3',
+    car: {
+      model: 'BMW X5',
+      plate: '06 QWE 789'
+    },
+    customer: {
+      name: 'Michael Johnson',
+      email: 'michael.johnson@example.com',
+      avatar: '/media/avatars/300-3.jpg'
+    },
+    pickupDate: '2024-06-10',
+    dropOffDate: '2024-06-15',
+    price: 500,
+    status: 'Cancelled'
+  }
+];
+
+export default ReservationList;
