@@ -106,6 +106,7 @@ import { Customers } from '@/pages/public-profile/profiles/customer/Customers';
 import { AddCustomer } from '@/pages/account/home/add-reservation';
 import React from 'react';
 import CustomerDetailsPage from '../pages/public-profile/profiles/customer/CustomerDetailsPage';
+import { AddCustomers } from '../pages/account/home/add-customers/AddCustomers';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -150,7 +151,7 @@ const AppRoutingSetup = (): ReactElement => {
 
           <Route path="/customer/customer" element={<Customers />} />
           <Route path="/customer/customer/view-customer" element={<CustomerDetailsPage />} />
-
+          <Route path="/customer/add-customer" element={<AddCustomers />} />
 
 
           <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
