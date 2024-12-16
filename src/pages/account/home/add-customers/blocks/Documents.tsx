@@ -32,15 +32,12 @@ const Documents = ({ title }: DocsProps) => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-5">
+        <div className="grid gap-5">
           <div className="grid gap-2.5">
-            <label className="form-label">Lisense number</label>
-            <input type="number" className="input" placeholder="Lisense number" />
+            <label className="form-label">Place of issuance of the license</label>
+            <input type="text" className="input" placeholder="Place of issuance of the license" />
           </div>
-          <div className="grid gap-2.5">
-            <label className="form-label">billing address</label>
-            <input type="text" className="input" placeholder="billing address" />
-          </div>
+          
         </div>
 
         <div className="grid lg:grid-cols-2 gap-5">
