@@ -55,7 +55,7 @@ const mockData: Reservation[] = [
       email: 'jane.doe@example.com'
     },
     status: 'Under Review'
-  },
+  }
 ];
 
 interface CustomersListProps {
@@ -71,77 +71,88 @@ const CustomersList: React.FC<CustomersListProps> = ({ searchQuery = '' }) => {
     navigate('view-customer');
   };
 
-  const columns = useMemo<ColumnDef<Reservation>[]>(() => [
-    {
-      accessorKey: 'number',
-      header: 'Order Number',
-      cell: ({ row }) => <span className="text-gray-800 font-bold">{row.original.number}</span>
-    },
-    {
-      accessorKey: 'owner',
-      header: 'Owner',
-      cell: ({ row }) => (
-        <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
-            <img src={row.original.owner.avatar} alt={row.original.owner.name} className="w-full h-full object-cover" />
-          </div>
-          <div>
-            <div className="font-bold">{row.original.owner.name}</div>
-            <div className="text-gray-500">{row.original.owner.email}</div>
-          </div>
-        </div>
-      )
-    },
-    {
-      accessorKey: 'car',
-      header: 'Car',
-      cell: ({ row }) => (
-        <div className="flex items-center gap-3">
-          <img src={row.original.car.icon} alt={row.original.car.model} className="w-8 h-8" />
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="bg-blue-500 text-white px-2 py-0.5 text-xs rounded">TR</span>
-              <span>{row.original.car.plate}</span>
+  const columns = useMemo<ColumnDef<Reservation>[]>(
+    () => [
+      {
+        accessorKey: 'number',
+        header: 'Order Number',
+        cell: ({ row }) => <span className="text-gray-800 font-bold">{row.original.number}</span>
+      },
+      {
+        accessorKey: 'owner',
+        header: 'Owner',
+        cell: ({ row }) => (
+          <div className="flex items-center">
+            <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
+              <img
+                src={row.original.owner.avatar}
+                alt={row.original.owner.name}
+                className="w-full h-full object-cover"
+              />
             </div>
-            <div className="text-gray-400 text-sm">{row.original.car.model}</div>
+            <div>
+              <div className="font-bold">{row.original.owner.name}</div>
+              <div className="text-gray-500">{row.original.owner.email}</div>
+            </div>
           </div>
-        </div>
-      )
-    },
-    {
-      accessorKey: 'date',
-      header: 'Date',
-      cell: ({ row }) => <span className="text-gray-800">{row.original.date}</span>
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      cell: ({ row }) => (
-        <StatusDropdown
-          selected={row.original.status}
-          setSelected={() => {}}
-          options={{
-            Active: { color: '#50CD89', backgroundColor: '#EEFAF4' },
-            'Under Review': { color: '#FFA800', backgroundColor: '#FFF8EA' }
-          }}
-        />
-      )
-    },
-    {
-      id: 'actions',
-      header: 'Actions',
-      cell: () => (
-        <div className="flex gap-3">
-          <button onClick={handleViewCustomerClick} className="p-2 hover:bg-gray-100 rounded">
-            <img src="/media/icons/view-light.svg" alt="View" className="w-4 h-4" />
-          </button>
-          <button className="p-2 hover:bg-gray-100 rounded">
-            <img src="/media/icons/edit-light.svg" alt="Edit" className="w-4 h-4" />
-          </button>
-        </div>
-      )
-    }
-  ], [handleViewCustomerClick]);
+        )
+      },
+      {
+        accessorKey: 'car',
+        header: 'Car',
+        cell: ({ row }) => (
+          <div className="flex items-center gap-3">
+            <img src={row.original.car.icon} alt={row.original.car.model} className="w-8 h-8" />
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="bg-blue-500 text-white px-2 py-0.5 text-xs rounded">TR</span>
+                <span>{row.original.car.plate}</span>
+              </div>
+              <div className="text-gray-400 text-sm">{row.original.car.model}</div>
+            </div>
+          </div>
+        )
+      },
+      {
+        accessorKey: 'date',
+        header: 'Date',
+        cell: ({ row }) => <span className="text-gray-800">{row.original.date}</span>
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }) => (
+          <StatusDropdown
+            selected={row.original.status}
+            setSelected={() => {}}
+            options={{
+              Active: { color: '#50CD89', backgroundColor: '#EEFAF4' },
+              'Under Review': { color: '#FFA800', backgroundColor: '#FFF8EA' }
+            }}
+          />
+        )
+      },
+      {
+        id: 'actions',
+        header: 'Actions',
+        cell: () => (
+          <div className="text-xs flex justify-center">
+            <a
+              href="#"
+              onClick={handleViewCustomerClick}
+              className="px-5 py-2 flex gap-2 hover:bg-gray-50"
+            >
+              <img src={toAbsoluteUrl('/media/icons/view-light.svg')} />
+            </a>
+            <a href="#" className="px-5 py-2 flex gap-2 hover:bg-gray-50">
+              <img src={toAbsoluteUrl('/media/icons/edit-light.svg')} />
+            </a>
+          </div>
+        )
+      }
+    ],
+    [handleViewCustomerClick]
+  );
 
   const filteredData = useMemo(() => {
     if (!searchQuery) return mockData;
@@ -159,23 +170,23 @@ const CustomersList: React.FC<CustomersListProps> = ({ searchQuery = '' }) => {
     <div className="p-6">
       {/* Toolbar */}
       <div className="flex items-center justify-end mb-4 w-full">
-      <div className="flex items-center gap-4">
-      <div className="flex gap-1 border rounded-lg p-1">
-          <button
-            className={`p-2 rounded transition-colors ${currentView === 'table' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-50'}`}
-            onClick={() => setCurrentView('table')}
-            title="Table View"
-          >
-            <i className="ki-filled ki-row-horizontal text-xl" />
-          </button>
-          <button
-            className={`p-2 rounded transition-colors ${currentView === 'grid' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-50'}`}
-            onClick={() => setCurrentView('grid')}
-            title="Grid View"
-          >
-            <i className="ki-filled ki-category text-xl" />
-          </button>
-        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex gap-1 border rounded-lg p-1">
+            <button
+              className={`p-2 rounded transition-colors ${currentView === 'table' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-50'}`}
+              onClick={() => setCurrentView('table')}
+              title="Table View"
+            >
+              <i className="ki-filled ki-row-horizontal text-xl" />
+            </button>
+            <button
+              className={`p-2 rounded transition-colors ${currentView === 'grid' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-50'}`}
+              onClick={() => setCurrentView('grid')}
+              title="Grid View"
+            >
+              <i className="ki-filled ki-category text-xl" />
+            </button>
+          </div>
           <button
             className={`py-2 px-4 rounded ${filterActive ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
             onClick={() => setFilterActive(!filterActive)}
@@ -184,12 +195,7 @@ const CustomersList: React.FC<CustomersListProps> = ({ searchQuery = '' }) => {
           </button>
           <button className="py-2 px-4 rounded bg-gray-200">Export</button>
         </div>
-        <input
-          type="text"
-          placeholder="Search..."
-          className="border px-4 py-2 rounded"
-        />
-       
+        <input type="text" placeholder="Search..." className="border px-4 py-2 rounded" />
       </div>
 
       {/* Conditional Rendering */}
