@@ -28,7 +28,7 @@ const ReservationList = () => {
           {reservations.map((reservation) => (
             <div
               key={reservation.id}
-              className="w-full max-w-xl bg-white rounded-xl p-4 shadow-sm border border-gray-100"
+              className="w-full max-w-xl rounded-xl p-4 shadow-sm border border-[#E7E8ED]"
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
@@ -372,7 +372,7 @@ const ReservationList = () => {
                   <span>View</span>
                 </a>
 
-                <a href="#" className="px-5 py-2 border- flex gap-2">
+                <a href="#" className="px-5 py-2 flex gap-2">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_2228_4994)">
 <path d="M3.69426 4.55403C3.65792 4.54199 3.62169 4.54199 3.58547 4.54199C3.41628 4.54199 3.27139 4.65078 3.22302 4.81985C3.19883 4.91648 3.21099 5.01323 3.25924 5.09771C3.30762 5.1823 3.39221 5.24271 3.48884 5.27893C3.69426 5.33934 3.89955 5.21852 3.95996 5.02526C3.98415 4.92863 3.97211 4.832 3.92374 4.74741C3.87548 4.65078 3.79089 4.59037 3.69426 4.55403Z" fill="#FFA800"/>
